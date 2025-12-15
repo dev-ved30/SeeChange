@@ -12,6 +12,7 @@ from pipeline.detection import Detector
 from pipeline.cutting import Cutter
 from pipeline.measuring import Measurer
 from pipeline.scoring import Scorer
+from pipeline.asteroid_checker import AsteroidChecker
 from pipeline.alerting import Alerting
 from pipeline.fakeinjection import FakeInjector
 
@@ -35,6 +36,7 @@ _PROCESS_OBJECTS = {
     'cutting': 'cutter',
     'measuring': 'measurer',
     'scoring': 'scorer',
+    'asteroid_checking': 'asteroid_checker',
     'alerting': 'alerter',
 }
 
@@ -231,6 +233,12 @@ class Pipeline:
         self.pars.add_defaults_to_dict(scoring_config)
         self.scorer = Scorer(**scoring_config)
 
+        # check for known asteroids
+        asteroid_checker_config = config.value('asteroid_checking', {})
+        asteroid_checker_config.update(kwargs.get('asteroid_checking', {}))
+        self.pars.add_defaults_to_dict(asteroid_checker_config)
+        self.asteroid_checker = AsteroidChecker(**asteroid_checker_config)
+
         # send alerts
         # Can't override alerting parameters at runtime; the Alerting
         #   object just reads the config directly.
@@ -374,6 +382,7 @@ class Pipeline:
                  'cutting': self.cutter.pars.get_critical_pars(),
                  'measuring': self.measurer.pars.get_critical_pars(),
                  'scoring': self.scorer.pars.get_critical_pars(),
+                 'asteroid_checking': self.asteroid_checker.pars.get_critical_pars(),
                  'alerting': {},
                  'report': {}
                 }
@@ -534,6 +543,7 @@ class Pipeline:
                                     'cutting': self.cutter,
                                     'measuring': self.measurer,
                                     'scoring': self.scorer,
+                                    'asteroid_checking': self.asteroid_checker,
                                     'alerting': self.alerter,
                                    }
                 # ...counting on python dictionaries being ordered...
