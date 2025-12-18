@@ -510,6 +510,16 @@ class DataStore:
             return None
         return self.deepscore_set.deepscores
 
+    @property
+    def mpc_designations( self ):
+        return self._mpc_designations
+
+    @mpc_designations.setter
+    def mpc_designations( self, val ):
+        self._mpc_designations = val
+
+    def get_mpc_designations( self ):
+        return self.mpc_designations
 
     @property
     def fakes( self ):
@@ -657,6 +667,7 @@ class DataStore:
         self._deepscore_set = None  # a list of r/b and ML/DL scores for Measurements
         self._fakes = None
         self._fakeanal = None
+        self._mpc_designations = None
 
         # these need to be added to the products_to_clear list
         self.reference = None
