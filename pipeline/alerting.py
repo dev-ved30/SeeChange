@@ -47,6 +47,8 @@ class Alerting:
         self.send_alerts = cfg.value( 'alerts.send_alerts' ) if send_alerts is None else send_alerts
         self.methods = cfg.value( 'alerts.methods' ) if methods is None else methods
 
+        import pdb; pdb.set_trace()
+
         if ( not isinstance( self.methods, dict ) ):
             raise TypeError( "Alerting: methods must be a dict." )
 
